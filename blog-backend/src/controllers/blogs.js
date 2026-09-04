@@ -17,4 +17,17 @@ router.delete("/:id", (req, res) => {
   res.status(204).end();
 });
 
+router.put("/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const { likes } = req.body;
+
+  const updated = blogs.updateLikes(id, likes);
+
+  if (!updated) {
+    return res.status(404).json({ error: "blog not found" });
+  }
+
+  res.json(updated);
+});
+
 module.exports = router;

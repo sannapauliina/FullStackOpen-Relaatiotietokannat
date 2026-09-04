@@ -22,4 +22,11 @@ function deleteBlog(id) {
   blogs = blogs.filter((blog) => blog.id !== id);
 }
 
-module.exports = { getBlogs, addBlog, deleteBlog };
+function updateLikes(id, likes) {
+  const blog = blogs.find((b) => b.id === id);
+  if (!blog) return null;
+  blog.likes = likes;
+  return blog;
+}
+
+module.exports = { getBlogs, addBlog, deleteBlog, updateLikes };
