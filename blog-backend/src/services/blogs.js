@@ -13,6 +13,12 @@ function getBlogs() {
 }
 
 function addBlog(blog) {
+  if (!blog.title || !blog.author) {
+    const error = new Error("title and author required");
+    error.type = "BAD_REQUEST";
+    throw error;
+  }
+
   const newBlog = { id: Date.now(), ...blog };
   blogs.push(newBlog);
   return newBlog;
@@ -24,7 +30,12 @@ function deleteBlog(id) {
 
 function updateLikes(id, likes) {
   const blog = blogs.find((b) => b.id === id);
-  if (!blog) return null;
+  if (!blog) {
+    const error = new Error("blog not found");
+    error.type = "NOT_FOUND";
+    throw error;
+  }
+
   blog.likes = likes;
   return blog;
 }
