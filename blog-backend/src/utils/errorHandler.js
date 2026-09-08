@@ -1,6 +1,18 @@
 function errorHandler(err, req, res, next) {
   console.error(err.message);
 
+  if (err.name === "SequelizeValidationError") {
+    return res.status(400).json({
+      error: err.errors.map((e) => e.message),
+    });
+  }
+
+  if (err.name === "SequelizeUniqueConstraintError") {
+    return res.status(400).json({
+      error: err.errors.map((e) => e.message),
+    });
+  }
+
   if (err.type === "NOT_FOUND") {
     return res.status(404).json({ error: err.message });
   }
@@ -9,8 +21,7 @@ function errorHandler(err, req, res, next) {
     return res.status(400).json({ error: err.message });
   }
 
-  // fallback
-  res.status(500).json({ error: "internal server error" });
+  return res.status(500).json({ error: "internal server error" });
 }
 
 module.exports = errorHandler;
