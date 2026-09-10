@@ -1,33 +1,39 @@
 const express = require("express");
 const router = express.Router();
-const blogs = require("../services/blogs");
 
-router.get("/", (req, res) => {
-  res.json(blogs.getBlogs());
+const Blog = require("../models/blog");
+const User = require("../models/user");
+
+const tokenExtractor = require("../middleware/tokenExtractor");
+const userExtractor = require("../middleware/userExtractor");
+
+router.get("/", async (req, res) => {
+  const blogs = await Blog.findAll({
+    include: {
+      model: User,
+      attributes: ["name", "username"],
+    },
+  });
+
+  res.json(blogs);
 });
 
-router.post("/", (req, res) => {
-  const newBlog = blogs.addBlog(req.body);
-  res.status(201).json(newBlog);
-});
+router.post("/", tokenExtractor, userExtractor, async (req, res) => {
+  const { title, author, url, likes } = req.body;
 
-router.delete("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  blogs.deleteBlog(id);
-  res.status(204).end();
-});
-
-router.put("/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const { likes } = req.body;
-
-  const updated = blogs.updateLikes(id, likes);
-
-  if (!updated) {
-    return res.status(404).json({ error: "blog not found" });
+  if (!req.user) {
+    return res.status(401).json({ error: "token missing or invalid" });
   }
 
-  res.json(updated);
+  const blog = await Blog.create({
+    title,
+    author,
+    url,
+    likes: likes || 0,
+    userId: req.user.id,
+  });
+
+  res.status(201).json(blog);
 });
 
 module.exports = router;
