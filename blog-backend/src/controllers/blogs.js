@@ -28,6 +28,7 @@ router.get("/", async (req, res) => {
 
   const blogs = await Blog.findAll({
     where,
+    order: [["likes", "DESC"]],
     include: {
       model: User,
       attributes: ["name", "username"],
