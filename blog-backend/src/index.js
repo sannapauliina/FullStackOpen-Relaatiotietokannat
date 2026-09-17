@@ -7,10 +7,12 @@ app.use(express.json());
 const blogRouter = require("./controllers/blogs");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+const authorsRouter = require("./controllers/authors");
 
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+app.use("/api/authors", authorsRouter);
 
 const errorHandler = require("./utils/errorHandler");
 app.use(errorHandler);
