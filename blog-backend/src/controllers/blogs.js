@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", tokenExtractor, userExtractor, async (req, res) => {
-  const { title, author, url, likes } = req.body;
+  const { title, author, url, likes, year } = req.body;
 
   if (!req.user) {
     return res.status(401).json({ error: "token missing or invalid" });
@@ -49,6 +49,7 @@ router.post("/", tokenExtractor, userExtractor, async (req, res) => {
     title,
     author,
     url,
+    year,
     likes: likes || 0,
     userId: req.user.id,
   });
