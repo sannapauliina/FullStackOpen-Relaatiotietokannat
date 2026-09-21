@@ -10,6 +10,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "migrate": "sequelize-cli db:migrate"
+    "start:test": "TESTING=true node src/index.js",
+    "migrate": "sequelize-cli db:migrate",
+    "test": "TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js"
   }
 }
