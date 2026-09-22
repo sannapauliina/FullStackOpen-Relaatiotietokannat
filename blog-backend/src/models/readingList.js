@@ -5,6 +5,14 @@ class ReadingList extends Model {}
 
 ReadingList.init(
   {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    blogId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     read: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
